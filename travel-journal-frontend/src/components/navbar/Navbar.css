@@ -1,0 +1,66 @@
+:root {
+    --navbarHeight: 52px;
+}
+
+.navbar {
+    position: fixed;
+    bottom: 0;
+    background-color: var(--secundaryColor);
+    width: 100%;
+    box-shadow: 0 -20px 25px -5px rgb(0 0 0 / 0.1),
+        0 8px 10px -6px rgb(0 0 0 / 0.1);
+    display: flex;
+    height: var(--navbarHeight);
+    padding: 8px;
+    gap: 8px;
+    font-size: 1.1em;
+    align-items: center;
+}
+
+.navbar .burgerMenuIcon {
+    font-size: 32px;
+}
+
+/* absolute flex flex-col-reverse bottom-14 bg-white pl-6 pr-4 min-h-[100px] border rounded-sm */
+.navbar .navbarMenu {
+    position: absolute;
+    display: flex;
+    flex-direction: column-reverse;
+    bottom: var(--navbarHeight);
+    background-color: var(--secundaryColor);
+    border: 1 solid var(--borderColor);
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    padding: 24px;
+    width: 100%;
+    left: 0;
+}
+
+.navbar .navbarMenu a {
+    display: block;
+    text-align: center;
+}
+.navbar .navbarMenu button {
+    display: block;
+    text-align: right;
+    width: 100%;
+}
+
+.navbar .navbarMenu hr {
+    margin: 18px 0;
+}
+
+.navbarTitle {
+    font-family: var(--headingFontFamily);
+    font-weight: bold;
+    font-size: 22px;
+}
+
+.backdrop {
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8);
+    position: fixed;
+    top: 0;
+    bottom: 0;
+}
