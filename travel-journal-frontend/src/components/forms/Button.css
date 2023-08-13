@@ -1,0 +1,38 @@
+.button {
+  border-radius: 13px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4px;
+  gap: 4px;
+}
+
+.button.large {
+  width: 70%;
+}
+
+.button.center {
+  margin: 0 auto;
+}
+
+.button.right {
+  margin-left: 15%;
+  margin-right: 15%;
+}
+
+.button.primary {
+  background-color: var(--primaryColor);
+  color: var(--primaryContrast);
+  font-size: 16px;
+}
+
+.button.spaced {
+  margin-top: 20px;
+  margin-bottom: 16px;
+  padding: 10px;
+}
+
+.button[disabled] {
+  background-color: var(--disabledColor);
+  color: var(--disabledContrast);
+}
