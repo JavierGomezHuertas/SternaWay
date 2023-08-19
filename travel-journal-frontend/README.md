@@ -1,5 +1,21 @@
 # Travel Journal Frontend
 
+## Instalación
+
+1. Copiar .env.example a .env y configurar las variables de entorno
+
+2. Instalar dependencias y crear la base de datos:
+
+```bash
+npm install
+```
+
+## Ejecución
+
+```bash
+npm run dev
+```
+
 ## Funcionalidades por implementar
 
 - [x] Ordenar los posts por fecha o like ascendente o descendente
