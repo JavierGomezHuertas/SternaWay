@@ -62,6 +62,7 @@ http: router.get(
 router.get(
     "/posts/user/:userId",
     handleAsyncError(async (req, res) => {
+        //Obtener todos los posts creados por un usuario
         const userId = req.params.userId;
         const posts = await listUserPosts(userId);
         sendResponse(res, posts);

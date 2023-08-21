@@ -17,6 +17,7 @@ router.post(
     json(),
     validateBody(registerPayload),
     handleAsyncError(async (req, res) => {
+        //Reguistra el usuario
         await registerUser(req.body);
         sendResponse(res);
     })
@@ -39,6 +40,7 @@ router.post(
     "/users/validate-email",
     json(),
     handleAsyncError(async (req, res) => {
+        //Valida el email de usuario (Necesita mejoras)
         const { email, code } = req.body;
         await validateEmailCode(email, code);
         sendResponse(res);
