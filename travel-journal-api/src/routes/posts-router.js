@@ -104,7 +104,7 @@ router.delete(
         const postId = req.params.id;
         const userId = req.currentUser.id;
         //Borrar el post con id req.params.id
-        await removePost(postId);
+        await removePost(postId, userId);
         sendResponse(res);
     })
 );

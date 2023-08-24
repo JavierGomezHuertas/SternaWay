@@ -56,6 +56,10 @@
   width: 60px;
 }
 
+.confirm-modal button:last-child {
+    margin-left: 10px;
+}
+
 .submit {
   font-size: 0.9rem;
   font-weight: bold;

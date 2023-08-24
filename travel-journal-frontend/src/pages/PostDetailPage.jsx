@@ -13,6 +13,9 @@ import { sendComment } from "../api/send-comment.js";
 import { FormInput } from "../components/forms/FormInput.jsx";
 import { Form } from "../components/forms/Form.jsx";
 import { ConfirmModal } from "../components/posts/ConfirmModal.jsx";
+import { deleteComment } from "../api/delete-comment.js";
+import { sendEditComment } from "../api/send-edit-comment.js";
+import { FormEdit } from "../components/forms/FormEdit.jsx";
 
 const host = import.meta.env.VITE_API_HOST;
 
@@ -24,6 +27,13 @@ export function PostDetailPage() {
     const [isPostAuthor, setIsPostAuthor] = useState(false);
     const navigate = useNavigate();
     const [showConfirm, setShowConfirm] = useState(false);
+    const [editingCommentId, setEditingCommentId] = useState(null);
+    const [editedComments, setEditedComments] = useState({});
+    const [showDeleteCommentConfirm, setShowDeleteCommentConfirm] =
+        useState(false);
+    const [commentToDeleteId, setCommentToDeleteId] = useState(null);
+    const [deleteCommentConfirmStates, setDeleteCommentConfirmStates] =
+        useState({});
 
     useEffect(() => {
         getPostDetail(id).then((post) => {
@@ -84,14 +94,79 @@ export function PostDetailPage() {
         navigate(`/user/profile/${userId}`);
     }
 
+    function handleEditComment(comment) {
+        setEditingCommentId(comment.id);
+        setEditedComments((prevEditedComments) => ({
+            ...prevEditedComments,
+            [comment.id]: comment.comment,
+        }));
+    }
+
+    function handleEditCommentInputChange(commentId, value) {
+        setEditedComments((prevEditedComments) => ({
+            ...prevEditedComments,
+            [commentId]: value,
+        }));
+    }
+
+    async function handleSaveEditedComment(comment) {
+        await sendEditComment(currentPost.id, comment.id, {
+            text: editedComments[comment.id],
+        });
+
+        const post = await getPostDetail(id);
+
+        setCurrentPost(post);
+
+        setEditingCommentId(null);
+
+        setEditedComments((prev) => ({
+            ...prev,
+            [comment.id]: undefined,
+        }));
+    }
+
+    function handleCancelEditComment(commentId) {
+        setEditingCommentId(null);
+        setEditedComments((prevEditedComments) => ({
+            ...prevEditedComments,
+            [commentId]: undefined,
+        }));
+    }
+
+    {
+        showDeleteCommentConfirm && (
+            <ConfirmModal
+                onConfirm={() => handleDeleteComment(commentToDeleteId)}
+                onCancel={() => {
+                    setShowDeleteCommentConfirm(false);
+                    setCommentToDeleteId(null);
+                }}
+            />
+        );
+    }
+
+    async function handleDeleteComment(commentId) {
+        try {
+            await deleteComment(currentPost.id, commentId);
+            const post = await getPostDetail(id);
+            setCurrentPost(post);
+            setShowDeleteCommentConfirm(false);
+            setCommentToDeleteId(null);
+        } catch (err) {
+            console.log(err);
+        }
+    }
+
     return (
         <>
             <div className="container bottomSeparator">
                 <PageSubtitle2>{currentPost.title}</PageSubtitle2>
-                    <Button onClick={handleNavigateToUserPosts}>
-                        <UserLink user={currentPost.user[0]} />
-                    </Button>
-                <img className="portrait"
+                <Button onClick={handleNavigateToUserPosts}>
+                    <UserLink user={currentPost.user[0]} />
+                </Button>
+                <img
+                    className="portrait"
                     src={
                         currentPost.photos[0]?.imageURL?.startsWith("http")
                             ? currentPost.photos[0]?.imageURL
@@ -125,6 +200,9 @@ export function PostDetailPage() {
                 <h3 className="commentsTitle">Comments:</h3>
                 <ul className="commentsList">
                     {currentPost.comments.map((comment) => {
+                        const isCommentAuthor =
+                            currentUser.id === comment.user.id;
+                        const isEditing = editingCommentId === comment.id;
                         return (
                             <li key={comment.id} className="comment">
                                 <Button
@@ -137,6 +215,84 @@ export function PostDetailPage() {
                                     <UserLink user={comment.user} />
                                 </Button>
                                 <p>{comment.comment}</p>
+                                {isCommentAuthor && (
+                                    <>
+                                        <Button
+                                            onClick={() =>
+                                                handleEditComment(comment)
+                                            }
+                                        >
+                                            Edit
+                                        </Button>
+                                    </>
+                                )}
+                                {isEditing ? (
+                                    <>
+                                        <FormEdit
+                                            type="text"
+                                            value={
+                                                editedComments[comment.id] ??
+                                                comment.comment
+                                            }
+                                            onChange={(e) =>
+                                                handleEditCommentInputChange(
+                                                    comment.id,
+                                                    e.target.value
+                                                )
+                                            }
+                                        />
+                                        <Button
+                                            onClick={() =>
+                                                handleSaveEditedComment(comment)
+                                            }
+                                        >
+                                            Save
+                                        </Button>
+                                        <Button
+                                            onClick={() =>
+                                                handleCancelEditComment(
+                                                    comment.id
+                                                )
+                                            }
+                                        >
+                                            Cancel
+                                        </Button>
+                                    </>
+                                ) : (
+                                    <>{/* ... */}</>
+                                )}
+                                {isCommentAuthor && (
+                                    <Button
+                                        onClick={() => {
+                                            const updatedStates = {
+                                                ...deleteCommentConfirmStates,
+                                            };
+                                            updatedStates[comment.id] = true;
+                                            setDeleteCommentConfirmStates(
+                                                updatedStates
+                                            );
+                                        }}
+                                    >
+                                        Delete
+                                    </Button>
+                                )}
+
+                                {deleteCommentConfirmStates[comment.id] && (
+                                    <ConfirmModal
+                                        onConfirm={() =>
+                                            handleDeleteComment(comment.id)
+                                        }
+                                        onCancel={() => {
+                                            const updatedStates = {
+                                                ...deleteCommentConfirmStates,
+                                            };
+                                            updatedStates[comment.id] = false;
+                                            setDeleteCommentConfirmStates(
+                                                updatedStates
+                                            );
+                                        }}
+                                    />
+                                )}
                             </li>
                         );
                     })}
@@ -150,7 +306,9 @@ export function PostDetailPage() {
                             value={commentInput}
                             onChange={setCommentInput}
                         />
-                        <Button type="submit" className="submit">Post</Button>
+                        <Button type="submit" className="submit">
+                            Post
+                        </Button>
                     </Form>
                 )}
             </section>

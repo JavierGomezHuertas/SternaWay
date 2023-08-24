@@ -50,7 +50,7 @@ const handleUploadImage = async (e) => {
         try {
             await Promise.all([
                 uploadPostPhotos(post.id, newImages),
-                sendEditPost(post.id, {
+                sendEditPost(post.id, post.userId, {
                     title,
                     description,
                 }),

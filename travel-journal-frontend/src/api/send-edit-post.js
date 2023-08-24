@@ -1,5 +1,5 @@
 import { fetchAPI } from "./fetch-api.js";
 
-export async function sendEditPost(postId, postData) {
-    return fetchAPI(`/posts/edit/${postId}`, "PATCH", postData);
+export async function sendEditPost(postId, userId, postData) {
+    return fetchAPI(`/posts/edit/${postId}`, "PATCH", { userId, ...postData });
 }
