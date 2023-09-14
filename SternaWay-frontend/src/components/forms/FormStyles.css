@@ -1,0 +1,153 @@
+.inputContainer {
+    display: flex;
+    padding: 8px;
+    flex-wrap: wrap;
+    gap: 3px;
+}
+
+.inputContainer label {
+    padding-left: 6px;
+}
+
+.inputContainer.gap {
+    gap: 8px;
+}
+
+.inputContainer.noWrap {
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.formInput, .editTitle, .editDescription {
+    width: 100%;
+    border: 1px solid var(--borderColor);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    padding: 6px;
+    font-family: var(--headingFontFamily);
+    background-color: var(--primaryContrast);
+}
+
+.formInput.withError {
+    border-color: var(--dangerColor);
+}
+
+.inputContainer .errorMsg {
+    color: var(--dangerColor);
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.formInput input {
+    width: 100%;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    height: 100%;
+    margin-left: 3px;
+}
+
+.formInput .prefixIcon {
+    padding: 4px;
+}
+
+.formInput.autoWidth {
+    width: auto;
+}
+
+textarea, .editDescription {
+    height: 250px;
+}
+
+.formImage {
+    padding: 9px;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.formImageList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+}
+
+.editImage {
+    margin: 8px;
+    gap: 8px;
+    justify-content: center;
+    border: 1px solid var(--borderColor);
+    border-radius: 10px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.editImageList {
+    display: flex;
+    gap: 8px;
+    padding-block: 9px;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+
+.formImageList img, .editImageList img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+
+.formImageList li, .editImageList img {
+    border: 1px solid var(--textColor);
+}
+
+.formImageInput {
+    display: none;
+}
+
+.formSelect {
+    width: 100%;
+    padding: 6px;
+    border-radius: 10px;
+    border: 1px solid;
+}
+
+form, .editpage {
+    padding: 16px;
+}
+
+form.inline {
+    position: fixed;
+    left: 0;
+    right: 0;
+    background-color: var(--backgroundColor);
+    padding: 0;
+    flex-grow: 1;
+}
+
+form.inlineAtTop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background-color: var(--backgroundColor);
+    padding: 0;
+    flex-grow: 1;
+}
+
+.filter {
+    display: flex;
+    padding-inline: 8px;
+    gap: 1px; 
+    justify-content: center;
+}
+
+.filter .inputContainer {
+    padding-top: 0;
+    width: 100%;
+}
+
+.filter .formSelect {
+    border-radius: 8px;
+}
